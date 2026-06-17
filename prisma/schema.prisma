@@ -19,7 +19,7 @@ generator client {
 model Profile {
   id String @id @default(uuid())
   userId String @unique
-  userName String
+  name String
   imageUrl String @db.Text
   email String @db.Text
 
@@ -33,7 +33,7 @@ model Profile {
 
 model Server {
   id String @id @default(uuid())
-  serverName String
+  name String
   imageUrl String @db.Text
   inviteCode String @db.Text
 
