@@ -36,7 +36,7 @@ const formSchema = z.object({
     .min(1, "Server image is required.")
 })
 
-export const InitialModel = () => {
+export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();

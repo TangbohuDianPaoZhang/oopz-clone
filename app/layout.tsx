@@ -3,6 +3,7 @@ import { Open_Sans, Geist_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ModalProvider } from "@/components/providers/modal-provider";
 import { cn } from "@/lib/utils";
 
 const openSans = Open_Sans({
@@ -36,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignOutUrl="/">
       <html lang="en" suppressHydrationWarning className={`${openSans.variable} ${geistMono.variable} ${geistSans.variable}`}>
         <body className={cn(
           font.className,
@@ -46,6 +47,7 @@ export default function RootLayout({
             defaultTheme="dark"
             enableSystem
           >
+            <ModalProvider />
             {children}
           </ThemeProvider>
           
