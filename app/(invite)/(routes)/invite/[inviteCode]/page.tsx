@@ -4,21 +4,20 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 
 interface InviteCodePageProps {
-  params: {
+  params: Promise<{
     inviteCode: string;
-  };
+  }>;
 }
 
-const InviteCodePage = async ({
-  params
-}: InviteCodePageProps) => {
+const InviteCodePage = async (props: InviteCodePageProps) => {
+  const params = await props.params;
   const profile = await currentProfile();
   const { redirectToSignIn } = await auth();
 
   if (!profile) {
     return redirectToSignIn();
   }
-  
+
   if (!params.inviteCode) {
     return redirect("/");
   }
