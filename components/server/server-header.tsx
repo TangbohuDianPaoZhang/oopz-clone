@@ -107,6 +107,11 @@ export const ServerHeader = ({
         )}
         {isAdmin && (
           <DropdownMenuItem
+          onClick={() => {
+            setTimeout(() => {
+              onOpen('deleteServer', {server})
+            }, 0);
+          }}
             className="text-rose-500 px-3 py-2 text-sm cursor-pointer"
           >
             Delete Server
@@ -115,6 +120,11 @@ export const ServerHeader = ({
         )}
         {!isAdmin && (
           <DropdownMenuItem
+            onClick={() => {
+              setTimeout(() => {
+                onOpen("leaveServer", {server})
+              }, 0);
+            }}
             className="text-rose-500 px-3 py-2 text-sm cursor-pointer"
           >
             Leave Server
