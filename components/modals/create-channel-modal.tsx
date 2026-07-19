@@ -33,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { useEffect } from "react";
 
 // 不需要使用ismounted，因为将要使用aim模型
 const formSchema = z.object({
@@ -49,12 +50,13 @@ const formSchema = z.object({
 })
 
 export const CreateChannelModal = () => {
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const params = useParams();
 
   // 检测这个modal是否被打开
   const isModalOpen = isOpen && type === "createChannel";
+  const { channelType } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -62,7 +64,15 @@ export const CreateChannelModal = () => {
       name: "",
       type: ChannelType.TEXT,
     }
-  })
+  });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    } else {
+      form.setValue("type", ChannelType.TEXT);
+    }
+  }, [channelType, form]);
 
   // 用于识别何时禁用输入
   const isLoading = form.formState.isSubmitting;
