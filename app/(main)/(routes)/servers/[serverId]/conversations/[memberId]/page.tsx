@@ -6,15 +6,14 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 interface MemberIdPageProps {
-  params: {
+  params: Promise<{
     memberId: string;
     serverId: string;
-  }
+  }>
 }
 
-const MemberIdPage = async ({
-  params
-}: MemberIdPageProps) => {
+const MemberIdPage = async (props: MemberIdPageProps) => {
+  const params = await props.params;
   const profile = await currentProfile();
   const { redirectToSignIn } = await auth();
 

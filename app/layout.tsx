@@ -5,6 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { cn } from "@/lib/utils";
+import { SocketProvider } from "@/components/providers/socket-provider";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -47,10 +48,12 @@ export default function RootLayout({
             defaultTheme="dark"
             enableSystem
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              {children}
+            </SocketProvider>
           </ThemeProvider>
-          
+
         </body>
       </html>
     </ClerkProvider>
