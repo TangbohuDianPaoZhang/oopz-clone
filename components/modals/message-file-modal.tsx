@@ -27,9 +27,14 @@ import { useModal } from "@/hooks/use-modal-store";
 import queryString from "query-string";
 
 const formSchema = z.object({
-  fileUrl: z
-    .string()
-    .min(1, "Attachment is required.")
+  file: z
+    .object({
+      fileUrl: z.string(),
+      fileType: z.string(),
+      fileName: z.string()
+    },{
+      error: "Attachment is required."
+    })
 })
 
 export const MessageFileModal = () => {
@@ -42,7 +47,7 @@ export const MessageFileModal = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fileUrl: "",
+      file: {},
     }
   });
 
@@ -62,8 +67,10 @@ export const MessageFileModal = () => {
       });
 
       await axios.post(url, {
-        ...values,
-        content: values.fileUrl
+        fileUrl: values.file.fileUrl,
+        content: values.file.fileName,
+        fileType: values.file.fileType,
+        fileName: values.file.fileName    
       });
 
       form.reset();
@@ -94,7 +101,7 @@ export const MessageFileModal = () => {
                 <div className="flex items-center justify-center text-center">
                   <FormField
                     control={form.control}
-                    name="fileUrl"
+                    name="file"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>

@@ -7,8 +7,16 @@ import Image from "next/image";
 import { UploadDropzone } from "@/lib/uploadthing";
 
 interface FileUploadProps {
-  onChange: (url?: string) => void;
-  value: string;
+  onChange: (file?: {
+    fileUrl: string;
+    fileType: string;
+    fileName: string;
+  }) => void;
+  value?: {
+    fileUrl: string;
+    fileType: string;
+    fileName: string;
+  };
   endpoint: "messageFile" | "serverImage";
 }
 
@@ -23,6 +31,7 @@ export const FileUpload = ({
 
   const isImage = fileType.startsWith("image/");
   const isPdf = fileType === "application/pdf";
+  console.log("file name is" + value?.fileName);
 
 
   if (value && isImage) {
@@ -30,15 +39,14 @@ export const FileUpload = ({
       <div className="relative h-20 w-20">
         <Image
           fill
-          src={value}
+          src={value.fileUrl}
           alt="Upload"
           className="rounded-full"
         />
 
         <button
           onClick={() => {
-            onChange("");
-            setFileType("");
+            onChange(undefined);
           }}
           className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
           type="button"
@@ -55,16 +63,16 @@ export const FileUpload = ({
       <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
         <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
         <a
-          href={value}
+          href={value.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
         >
-          {fileName}
+          {value?.fileName}
         </a>
         <button
           onClick={() => {
-            onChange("");
+            onChange(undefined);
           }}
           className="bg-rose-500 text-white p-1 rounded-full absolute -top-2 -right-2"
           type="button"
@@ -85,7 +93,11 @@ export const FileUpload = ({
 
         if (!file) return;
 
-        onChange(file.ufsUrl);
+        onChange({
+          fileUrl: file.ufsUrl,
+          fileType: file.type,
+          fileName: file.name
+        });
         setFileType(file.type);
         setFileName(file.name);
 
