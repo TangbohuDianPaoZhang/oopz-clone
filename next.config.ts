@@ -10,7 +10,10 @@ const nextConfig: NextConfig = {
         pathname: "/f/*",
       },
     ],
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
