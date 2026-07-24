@@ -31,9 +31,11 @@ const formSchema = z.object({
   name: z
     .string()
     .min(1, "Server name is required."),
-  imageUrl: z
-    .string()
-    .min(1, "Server image is required.")
+  image: z.object({
+    fileUrl: z.string(),
+    fileType: z.string(),
+    fileName: z.string()
+  })
 })
 
 export const InitialModal = () => {
@@ -44,12 +46,12 @@ export const InitialModal = () => {
   useEffect(() => {
     setIsMounted(true);
   }, [])
-  
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      imageUrl: "",
+      image: {},
     }
   })
 
@@ -90,8 +92,8 @@ export const InitialModal = () => {
                 <div className="flex items-center justify-center text-center">
                   <FormField
                     control={form.control}
-                    name="imageUrl"
-                    render={({field}) => (
+                    name="image"
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <FileUpload
@@ -108,10 +110,10 @@ export const InitialModal = () => {
                 <FormField
                   control={form.control}
                   name="name"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel 
-                      className="uppercase text-xs font-bold text-zinc-500
+                      <FormLabel
+                        className="uppercase text-xs font-bold text-zinc-500
                       dark:text-secondary/70">
                         Server name
                       </FormLabel>
@@ -126,7 +128,7 @@ export const InitialModal = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> 
+                />
               </div>
               <DialogFooter className="bg-gray-100 px-6 py-4">
                 <Button variant="primary" disabled={isLoading}>
