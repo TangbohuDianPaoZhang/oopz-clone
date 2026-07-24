@@ -32,9 +32,11 @@ const formSchema = z.object({
   name: z
     .string()
     .min(1, "Server name is required."),
-  imageUrl: z
-    .string()
-    .min(1, "Server image is required.")
+  image: z.object({
+    fileUrl: z.string(),
+    fileType: z.string(),
+    fileName: z.string()
+  })
 })
 
 export const EditServerModal = () => {
@@ -44,19 +46,19 @@ export const EditServerModal = () => {
   // 检测这个modal是否被打开
   const isModalOpen = isOpen && type === "editServer";
   const { server } = data;
-  
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      imageUrl: "",
+      image: {},
     }
   })
 
   useEffect(() => {
     if (server) {
       form.setValue("name", server.name);
-      form.setValue("imageUrl", server.imageUrl);
+      form.setValue("image.fileUrl", server.imageUrl);
     }
   }, [server, form])
 
@@ -98,8 +100,8 @@ export const EditServerModal = () => {
                 <div className="flex items-center justify-center text-center">
                   <FormField
                     control={form.control}
-                    name="imageUrl"
-                    render={({field}) => (
+                    name="image"
+                    render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <FileUpload
@@ -116,10 +118,10 @@ export const EditServerModal = () => {
                 <FormField
                   control={form.control}
                   name="name"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel 
-                      className="uppercase text-xs font-bold text-zinc-500
+                      <FormLabel
+                        className="uppercase text-xs font-bold text-zinc-500
                       dark:text-secondary/70">
                         Server name
                       </FormLabel>
@@ -134,7 +136,7 @@ export const EditServerModal = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> 
+                />
               </div>
               <DialogFooter className="bg-gray-100 px-6 py-4">
                 <Button className="w-full" variant="primary" disabled={isLoading}>
